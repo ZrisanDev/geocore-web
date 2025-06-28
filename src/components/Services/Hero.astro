@@ -1,0 +1,224 @@
+---
+// Hero.astro
+import { Image } from "astro:assets";
+// Importa tu imagen local desde src/assets/
+import heroImage from "../../assets/images/services.webp";
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  showContent?: boolean;
+}
+
+const {
+  title = "Nuestros Servicios",
+  subtitle = "Experiencia increíble te espera",
+  showContent = true,
+} = Astro.props;
+---
+
+<section class="hero-container relative">
+  <!-- Hero Section -->
+  <div
+    class="hero-section relative h-screen w-full overflow-hidden bg-black/50"
+  >
+    <!-- Background Image -->
+    <div class="hero-image absolute inset-0 z-0">
+      <Image
+        src={heroImage}
+        alt="Hero Background"
+        width={1920}
+        height={1080}
+        class="h-full w-full object-cover opacity-60"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 bg-black/50 bg-opacity-50 z-10"></div>
+
+    <!-- Hero Content -->
+    {
+      showContent && (
+        <div class="hero-content relative z-20 flex h-full items-center justify-center px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-4xl mx-auto">
+            <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              {title}
+            </h1>
+            {/* <p class="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed">
+            {subtitle}
+          </p> */}
+            {/* <div class="hero-buttons flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <button class="cta-button bg-white text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-300 transform hover:scale-105">
+              Comenzar
+            </button>
+            <button class="secondary-button border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-105">
+              Saber Más
+            </button>
+          </div> */}
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Scroll Indicator -->
+    <div
+      class="scroll-indicator absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+    >
+      <div class="animate-bounce">
+        <svg
+          class="w-6 h-6 text-white mx-auto"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section Below Hero -->
+  <!-- <div class="content-section bg-white py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      <slot />
+    </div>
+  </div> -->
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Animaciones GSAP
+  document.addEventListener("astro:page-load", () => {
+    // Timeline principal para la entrada del hero
+    const heroTL = gsap.timeline();
+
+    // Animación de entrada del hero (solo fade in inicial)
+    heroTL
+      .from(".hero-image", {
+        scale: 1.1,
+        opacity: 0,
+        duration: 2,
+        ease: "power2.out",
+      })
+      .from(
+        ".hero-title",
+        {
+          y: 100,
+          opacity: 0,
+          duration: 1,
+          ease: "power3.out",
+        },
+        "-=1.5"
+      )
+      .from(
+        ".hero-subtitle",
+        {
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        "-=0.5"
+      )
+      .from(
+        ".hero-buttons button",
+        {
+          y: 30,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.2,
+          ease: "power3.out",
+        },
+        "-=0.3"
+      )
+      .from(
+        ".scroll-indicator",
+        {
+          opacity: 0,
+          y: 20,
+          duration: 0.5,
+          ease: "power3.out",
+        },
+        "-=0.2"
+      );
+
+    // Animación de entrada para el contenido debajo del hero
+    gsap.from(".content-section", {
+      opacity: 0,
+      y: 100,
+      duration: 1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".content-section",
+        start: "top 80%",
+        end: "top 50%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    // Hover effects para los botones
+    const buttons = document.querySelectorAll(".hero-buttons button");
+    buttons.forEach((button) => {
+      button.addEventListener("mouseenter", () => {
+        gsap.to(button, { scale: 1.05, duration: 0.3, ease: "power2.out" });
+      });
+
+      button.addEventListener("mouseleave", () => {
+        gsap.to(button, { scale: 1, duration: 0.3, ease: "power2.out" });
+      });
+    });
+
+    // Animación continua del scroll indicator
+    gsap.to(".scroll-indicator svg", {
+      y: 10,
+      duration: 1.5,
+      ease: "power2.inOut",
+      yoyo: true,
+      repeat: -1,
+    });
+  });
+</script>
+
+<style>
+  /* Estilos adicionales si es necesario */
+  .hero-container {
+    position: relative;
+  }
+
+  .hero-section {
+    background: #000;
+  }
+
+  /* Mejoras para la responsividad */
+  @media (max-width: 640px) {
+    .hero-title {
+      font-size: 2.25rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Asegurar que el hero ocupe toda la pantalla */
+  .hero-section {
+    min-height: 100vh;
+    min-height: 100dvh; /* Para soporte de viewport dinámico en móviles */
+  }
+</style>

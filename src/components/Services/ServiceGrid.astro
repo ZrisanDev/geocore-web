@@ -1,0 +1,351 @@
+---
+const services = [
+  {
+    id: 1,
+    title: "CONSULTORÍA",
+    description: "Asesoría técnica especializada en estudios y evaluaciones geotécnicas, ambientales, topográficas y de control de calidad, tanto en laboratorio como en campo.",
+  },
+  {
+    id: 2,
+    title: "ENSAYOS EN ROCAS",
+    description: "Pruebas de laboratorio enfocadas en caracterizar las propiedades físicas y mecánicas de las rocas, esenciales para el diseño y análisis de obras geotécnicas y estructurales.",
+  },
+  {
+    id: 3,
+    title: "ENSAYOS DE SUELOS",
+    description: "Evaluación del comportamiento físico y mecánico de los suelos mediante pruebas de laboratorio, clave para la clasificación y análisis de estabilidad y capacidad de carga del terreno.",
+  },
+  {
+    id: 4,
+    title: "ENSAYOS DE GEOSINTÉTICOS",
+    description: "Análisis de materiales geosintéticos utilizados en obras de ingeniería civil, evaluando su resistencia, interacción con suelos y características físicas.",
+  },
+  {
+    id: 5,
+    title: "ENSAYOS DE AGREGADOS",
+    description: "Pruebas destinadas a determinar las propiedades de agregados utilizados en la construcción, como resistencia a la abrasión y durabilidad.",
+  },
+  {
+    id: 6,
+    title: "ENSAYOS QUÍMICOS",
+    description: "Análisis químicos del suelo y materiales relacionados para identificar componentes que puedan afectar la estabilidad o durabilidad de una obra.",
+  },
+  {
+    id: 7,
+    title: "ENSAYOS DE CAMPO",
+    description: "Pruebas realizadas directamente en el terreno para evaluar condiciones in situ del suelo, su resistencia, densidad y distribución granulométrica.",
+  },
+];
+---
+
+<section class="services-section py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+  <div class="max-w-7xl mx-auto">
+    <!-- Título -->
+    <!-- <div class="text-center mb-16">
+      <h2 class="services-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#26656c] mb-4 opacity-0">
+        NUESTROS SERVICIOS
+      </h2>
+      <div class="title-underline w-32 h-1 bg-gradient-to-r from-[#26656c] to-teal-400 mx-auto opacity-0"></div>
+    </div> -->
+
+    <!-- Grid de servicios -->
+    <div class="services-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+      {services.map((service, index) => (
+        <article class={`service-card group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 opacity-0 ${index % 2 === 0 ? 'translate-y-8' : 'translate-y-12'}`}>
+          <!-- Número del servicio -->
+          <div class="service-header flex items-start justify-between mb-6">
+            <div>
+            </div>
+            <span class="service-number text-6xl font-light text-[#26656c]/40 group-hover:text-[#26656c]/80 transition-colors duration-300">
+              {service.id.toString().padStart(2, "0")}
+            </span>
+          </div>
+
+          <!-- Contenido -->
+          <div class="service-content">
+            <h3 class="service-title text-xl font-bold text-gray-900 mb-4 leading-tight group-hover:text-[#26656c] transition-colors duration-300">
+              {service.title.includes(" ") ? (
+                <Fragment>
+                  {service.title.split(" ").slice(0, -1).join(" ")}<br />
+                  <span class="text-teal-600">{service.title.split(" ").slice(-1)}</span>
+                </Fragment>
+              ) : (
+                service.title
+              )}
+            </h3>
+            
+            <p class="service-description text-gray-600 text-sm leading-relaxed mb-6 group-hover:text-gray-700 transition-colors duration-300">
+              {service.description}
+            </p>
+
+            <!-- Decorative line -->
+            <div class="service-line w-0 h-0.5 bg-gradient-to-r from-[#26656c] to-teal-400 group-hover:w-full transition-all duration-500"></div>
+          </div>
+
+          <!-- Hover effect overlay -->
+          <div class="absolute inset-0 bg-gradient-to-br from-[#26656c]/5 to-teal-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+        </article>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<script>
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  class ServicesAnimation {
+    constructor() {
+      this.initGSAP();
+      this.initAnimations();
+    }
+
+    initGSAP() {
+      gsap.registerPlugin(ScrollTrigger);
+    }
+
+    initAnimations() {
+      // Configuración global
+      gsap.set('.services-section', { visibility: 'visible' });
+
+      // Animación del título
+      const titleTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.services-section',
+          start: 'top 80%',
+          end: 'top 20%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+
+      titleTimeline
+        .fromTo('.services-title', 
+          { 
+            opacity: 0, 
+            y: 20, // Reducido de 30 a 20
+            scale: 0.97 // Reducido de 0.95 a 0.97
+          },
+          { 
+            opacity: 1, 
+            y: 0,
+            scale: 1,
+            duration: 0.5, // Reducido de 0.7 a 0.5
+            ease: 'power1.out' // Cambiado de power2 a power1
+          }
+        )
+        .fromTo('.title-underline',
+          {
+            opacity: 0,
+            scaleX: 0
+          },
+          {
+            opacity: 1,
+            scaleX: 1,
+            duration: 0.3, // Reducido de 0.5 a 0.3
+            ease: 'power1.out'
+          },
+          '-=0.1' // Reducido el overlap
+        );
+
+      // Animación de las tarjetas de servicios
+      gsap.utils.toArray('.service-card').forEach((card:any, index) => {
+        const isEven = index % 2 === 0;
+        const delay = index * 0.03; // Reducido de 0.05 a 0.03
+
+        gsap.fromTo(card,
+          {
+            opacity: 0,
+            y: isEven ? 20 : 25, // Reducido aún más el desplazamiento
+            x: isEven ? -10 : 10, // Reducido el desplazamiento lateral
+            rotation: isEven ? -0.5 : 0.5, // Reducida la rotación
+            scale: 0.99 // Menos cambio de escala
+          },
+          {
+            opacity: 1,
+            y: 0,
+            x: 0,
+            rotation: 0,
+            scale: 1,
+            duration: 0.4, // Reducido de 0.6 a 0.4
+            delay: delay,
+            ease: 'power1.out', // Cambiado a power1 para más rapidez
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 95%', // Cambiado de 90% a 95% para activar aún antes
+              end: 'top 20%',
+              toggleActions: 'play none none reverse'
+            }
+          }
+        );
+
+        // Animación del icono al hacer hover
+        const icon = card.querySelector('.service-icon');
+        const line = card.querySelector('.service-line');
+        
+        card.addEventListener('mouseenter', () => {
+          gsap.to(icon, {
+            rotation: 360,
+            scale: 1.1,
+            duration: 0.6,
+            ease: 'power2.out'
+          });
+          
+          gsap.to(line, {
+            width: '100%',
+            duration: 0.5,
+            ease: 'power2.out'
+          });
+        });
+
+        card.addEventListener('mouseleave', () => {
+          gsap.to(icon, {
+            rotation: 0,
+            scale: 1,
+            duration: 0.4,
+            ease: 'power2.out'
+          });
+          
+          gsap.to(line, {
+            width: '0%',
+            duration: 0.3,
+            ease: 'power2.out'
+          });
+        });
+      });
+
+      // Animación de los puntos decorativos
+      gsap.fromTo('.decorative-dots',
+        {
+          opacity: 0,
+          y: 30
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.decorative-dots',
+            start: 'top 90%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+
+      // Animación continua de los puntos
+      gsap.utils.toArray('.dot').forEach((dot:any, index) => {
+        gsap.to(dot, {
+          scale: 1.5,
+          duration: 1.5,
+          delay: index * 0.2,
+          repeat: -1,
+          yoyo: true,
+          ease: 'power2.inOut'
+        });
+      });
+
+      // Parallax suave para el fondo
+      gsap.to('.services-section', {
+        backgroundPosition: '50% 100px',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.services-section',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+
+      // Animación de entrada staggered para todas las tarjetas
+      gsap.fromTo('.service-card',
+        {
+          opacity: 0,
+          y: 30, // Reducido de 50 a 30
+          rotationY: 5 // Reducido de 8 a 5
+        },
+        {
+          opacity: 1,
+          y: 0,
+          rotationY: 0,
+          duration: 0.5, // Reducido de 0.8 a 0.5
+          stagger: {
+            amount: 0.4, // Reducido de 0.8 a 0.4
+            from: 'start',
+            ease: 'power1.out'
+          },
+          ease: 'power1.out', // Cambiado de power2 a power1
+          scrollTrigger: {
+            trigger: '.services-grid',
+            start: 'top 85%', // Cambiado de 80% a 85%
+            end: 'bottom 25%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    }
+  }
+
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener('astro:page-load', () => {
+    new ServicesAnimation();
+  });
+
+  // También inicializar en carga normal
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      new ServicesAnimation();
+    });
+  } else {
+    new ServicesAnimation();
+  }
+</script>
+
+<style>
+  .services-section {
+    visibility: hidden;
+  }
+
+  .service-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(38, 101, 108, 0.1), transparent);
+    transform: rotate(45deg) translate(-100%, -100%);
+    transition: transform 0.6s ease;
+  }
+
+  .service-card:hover::before {
+    transform: rotate(45deg) translate(100%, 100%);
+  }
+
+  .dot {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.2);
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .service-card {
+      transform: none !important;
+    }
+  }
+</style>

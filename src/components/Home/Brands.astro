@@ -1,0 +1,142 @@
+---
+import { Image } from "astro:assets";
+// Brands.astro
+import brand1 from "../../assets/images/brands/1.webp";
+import brand2 from "../../assets/images/brands/2.webp";
+import brand3 from "../../assets/images/brands/3.webp";
+import brand4 from "../../assets/images/brands/4.webp";
+import brand5 from "../../assets/images/brands/5.webp";
+import brand6 from "../../assets/images/brands/6.webp";
+import brand7 from "../../assets/images/brands/7.webp";
+import brand8 from "../../assets/images/brands/8.webp";
+import brand9 from "../../assets/images/brands/9.webp";
+import brand10 from "../../assets/images/brands/10.webp";
+
+const brands = [
+  { name: "Brand 1", src: brand1, alt: "Brand 1 Logo" },
+  { name: "Brand 2", src: brand2, alt: "Brand 2 Logo" },
+  { name: "Brand 3", src: brand3, alt: "Brand 3 Logo" },
+  { name: "Brand 4", src: brand4, alt: "Brand 4 Logo" },
+  { name: "Brand 5", src: brand5, alt: "Brand 5 Logo" },
+  { name: "Brand 6", src: brand6, alt: "Brand 6 Logo" },
+  { name: "Brand 7", src: brand7, alt: "Brand 7 Logo" },
+  { name: "Brand 8", src: brand8, alt: "Brand 8 Logo" },
+  { name: "Brand 9", src: brand9, alt: "Brand 9 Logo" },
+  { name: "Brand 10", src: brand10, alt: "Brand 10 Logo" },
+];
+
+// Duplicamos las marcas para el efecto infinito
+const extendedBrands = [...brands, ...brands];
+---
+
+<section class="bg-black/90 overflow-hidden py-12 brands-container">
+  <div class="w-full mx-auto">
+    <h2
+      class="text-3xl md:text-4xl lg:text-5xl font-black text-center mb-5 text-[#26656c] brands-title opacity-0 translate-y-4"
+    >
+      MARCAS QUE CONFÍAN EN NOSOTROS
+    </h2>
+
+    <div
+      class="slider-wrapper relative brands-slider-wrapper opacity-0 translate-y-8 mb-6"
+    >
+      <div class="brand-slider flex gap-4 md:gap-8 animate-scroll">
+        {
+          extendedBrands.map((brand) => (
+            <div class="brand-item flex-shrink-0 w-40 h-20 md:w-64 md:h-32">
+              <div class="w-full h-full bg-white rounded-lg shadow-lg border border-gray-200 flex items-center justify-center p-3 md:p-6 hover:shadow-xl hover:scale-105 transition-all duration-300">
+                <Image
+                  src={brand.src}
+                  alt={brand.alt}
+                  width={300}
+                  height={150}
+                  class="max-w-full max-h-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Gradientes para efecto de fade -->
+      <div
+        class="absolute left-0 top-0 w-20 h-full z-10 bg-gradient-to-r from-black/90 to-transparent pointer-events-none"
+      >
+      </div>
+      <div
+        class="absolute right-0 top-0 w-20 h-full z-10 bg-gradient-to-l from-black/90 to-transparent pointer-events-none"
+      >
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initializeBrandsAnimation() {
+    // Intersection Observer para animaciones de entrada
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -20% 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const title = entry.target.querySelector(".brands-title");
+          const slider = entry.target.querySelector(".brands-slider-wrapper");
+
+          if (title) title.classList.add("animate-in");
+          if (slider) slider.classList.add("animate-in");
+
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observar el contenedor principal
+    const brandsContainer = document.querySelector(".brands-container");
+    if (brandsContainer) {
+      observer.observe(brandsContainer);
+    }
+  }
+
+  // Función para verificar si ya se inicializó
+  function shouldInitialize() {
+    const brandsContainer = document.querySelector(".brands-container");
+    if (!brandsContainer) return false;
+
+    // Verificar si ya tiene las clases de animación aplicadas
+    const title = brandsContainer.querySelector(".brands-title");
+    const slider = brandsContainer.querySelector(".brands-slider-wrapper");
+
+    return !(
+      title?.classList.contains("animate-in") ||
+      slider?.classList.contains("animate-in")
+    );
+  }
+
+  // Inicializar en DOMContentLoaded (carga inicial)
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      if (shouldInitialize()) {
+        initializeBrandsAnimation();
+      }
+    });
+  } else {
+    // Si el DOM ya está cargado, inicializar inmediatamente
+    if (shouldInitialize()) {
+      initializeBrandsAnimation();
+    }
+  }
+
+  // Inicializar en astro:page-load (navegación SPA)
+  document.addEventListener("astro:page-load", () => {
+    // Pequeño delay para asegurar que el DOM esté completamente renderizado
+    setTimeout(() => {
+      if (shouldInitialize()) {
+        initializeBrandsAnimation();
+      }
+    }, 50);
+  });
+</script>

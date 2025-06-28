@@ -1,0 +1,262 @@
+---
+import { Image } from "astro:assets";
+import HeroImage from "../../assets/images/hero-img.webp";
+---
+
+<section class="hero-section relative w-full h-screen overflow-hidden bg-black">
+  <!-- Background Image -->
+  <div class="absolute inset-0 w-full h-full">
+    <Image
+      src={HeroImage}
+      width={1900}
+      height={900}
+      alt="Proyecto de construcción y geotecnia"
+      class="hero-image w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-black/60"></div>
+  </div>
+
+  <!-- Content -->
+  <div
+    class="content-overlay absolute inset-0 z-10 flex items-center justify-center lg:justify-start"
+  >
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto lg:mx-0 text-center lg:text-left">
+        <h1
+          class="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 lg:mb-8 leading-tight text-white"
+        >
+          <span class="title-line block">Expertos en</span>
+          <span class="title-line block" style="color: #26656c;">
+            Geotecnia de Alta Precisión
+          </span>
+        </h1>
+
+        <p
+          class="hero-subtitle text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-light text-gray-100 max-w-3xl mx-auto lg:mx-0 leading-relaxed mb-6 sm:mb-8 lg:mb-12"
+        >
+          Supervisión técnica, control de calidad y consultoría respaldada por
+          más de una década de experiencia.
+        </p>
+
+        <div class="hero-buttons flex justify-center lg:justify-start">
+          <button
+            class="hero-btn bg-gradient-to-r from-[#26656c] to-[#1e5258] hover:from-[#1e5258] hover:to-[#163f44] text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-lg text-sm sm:text-base lg:text-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
+          >
+            Nuestros Servicios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="scroll-indicator absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+  >
+    <div class="animate-bounce">
+      <svg
+        class="w-6 h-6 text-white mx-auto"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- GSAP Scripts -->
+<script>
+  import { gsap } from "gsap";
+
+  let heroTimeline: any = null;
+
+  function initHeroAnimation() {
+    // Limpiar timeline anterior si existe
+    if (heroTimeline) {
+      heroTimeline.kill();
+      heroTimeline = null;
+    }
+
+    // Resetear estilos a valores por defecto antes de animar
+    gsap.set(".hero-image", {
+      filter: "blur(0px)",
+      scale: 1,
+    });
+
+    gsap.set(".title-line", {
+      y: 0,
+      opacity: 1,
+    });
+
+    gsap.set(".hero-subtitle", {
+      y: 0,
+      opacity: 1,
+    });
+
+    gsap.set(".hero-btn", {
+      y: 0,
+      opacity: 1,
+    });
+
+    gsap.set(".scroll-indicator", {
+      opacity: 0,
+      y: 20,
+    });
+
+    // Pequeño delay para asegurar que el DOM esté listo
+    gsap.delayedCall(0.1, () => {
+      // Timeline principal
+      heroTimeline = gsap.timeline();
+
+      // Animación de la imagen (blur in)
+      heroTimeline
+        .fromTo(
+          ".hero-image",
+          {
+            filter: "blur(10px)",
+            scale: 1.1,
+          },
+          {
+            filter: "blur(0px)",
+            scale: 1,
+            duration: 1.5,
+            ease: "power2.out",
+          }
+        )
+
+        // Animación del título (split text simple)
+        .fromTo(
+          ".title-line",
+          {
+            y: 50,
+            opacity: 0,
+          },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power2.out",
+          },
+          "-=0.8"
+        )
+
+        // Animación del subtítulo
+        .fromTo(
+          ".hero-subtitle",
+          {
+            y: 30,
+            opacity: 0,
+          },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            ease: "power2.out",
+          },
+          "-=0.4"
+        )
+
+        // Animación del botón (fade in desde abajo)
+        .fromTo(
+          ".hero-btn",
+          {
+            y: 40,
+            opacity: 0,
+          },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+          },
+          "-=0.2"
+        )
+
+        // Animación del scroll indicator (fade in después del botón)
+        .fromTo(
+          ".scroll-indicator",
+          {
+            opacity: 0,
+            y: 20,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          },
+          "+=0.2"
+        );
+    });
+
+    // Animación continua del scroll indicator
+    gsap.to(".scroll-indicator svg", {
+      y: 10,
+      duration: 1.5,
+      ease: "power2.inOut",
+      yoyo: true,
+      repeat: -1,
+    });
+  }
+
+  function cleanupHeroAnimation() {
+    if (heroTimeline) {
+      heroTimeline.kill();
+      heroTimeline = null;
+    }
+  }
+
+  // Ejecutar en carga inicial
+  document.addEventListener("DOMContentLoaded", initHeroAnimation);
+
+  // Ejecutar en navegación de Astro
+  document.addEventListener("astro:page-load", initHeroAnimation);
+
+  // Limpiar al salir de la página
+  document.addEventListener("astro:before-preparation", cleanupHeroAnimation);
+</script>
+
+<style>
+  /* Optimización para imagen de fondo */
+  .hero-section img {
+    will-change: transform, filter;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
+  /* Prevenir el parpadeo en Safari */
+  .hero-section {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  /* Optimización para texto */
+  .hero-title {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .hero-subtitle {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Asegurar que el contenido esté siempre visible */
+  .content-overlay {
+    pointer-events: auto;
+  }
+
+  /* Estados por defecto para prevenir parpadeos */
+  .hero-subtitle,
+  .hero-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>

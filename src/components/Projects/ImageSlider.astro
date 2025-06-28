@@ -1,0 +1,264 @@
+---
+// ImageSlider.astro
+---
+
+<div id="image-slider" class="relative w-full h-full">
+  <!-- Imagen principal -->
+  <div class="relative w-full h-96 md:h-[500px] overflow-hidden rounded-lg">
+    <img
+      id="slider-main-image"
+      src=""
+      alt=""
+      class="w-full h-full object-cover transition-transform duration-500"
+    />
+
+    <!-- Overlay con información -->
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"
+    >
+      <div class="absolute bottom-4 left-4 text-white">
+        <div
+          id="slider-counter"
+          class="text-sm font-medium bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm"
+        >
+          1 / 5
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones de navegación -->
+    <button
+      id="slider-prev"
+      class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 hover:bg-black/50 text-white rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm opacity-0 hover:opacity-100 group-hover:opacity-100"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <button
+      id="slider-next"
+      class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 hover:bg-black/50 text-white rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm opacity-0 hover:opacity-100 group-hover:opacity-100"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Thumbnails -->
+  <div class="mt-4 px-2">
+    <div
+      id="thumbnails-container"
+      class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
+    >
+      <!-- Las thumbnails se generarán dinámicamente -->
+    </div>
+  </div>
+</div>
+
+<script>
+  class ImageSlider {
+    private images: string[] = [];
+    private currentIndex = 0;
+    private mainImage: HTMLImageElement;
+    private thumbnailsContainer: HTMLElement;
+    private counter: HTMLElement;
+    private prevBtn: HTMLElement;
+    private nextBtn: HTMLElement;
+    private slider: HTMLElement;
+
+    constructor() {
+      this.mainImage = document.getElementById(
+        "slider-main-image"
+      ) as HTMLImageElement;
+      this.thumbnailsContainer = document.getElementById(
+        "thumbnails-container"
+      )!;
+      this.counter = document.getElementById("slider-counter")!;
+      this.prevBtn = document.getElementById("slider-prev")!;
+      this.nextBtn = document.getElementById("slider-next")!;
+      this.slider = document.getElementById("image-slider")!;
+
+      this.init();
+    }
+
+    private init(): void {
+      this.prevBtn.addEventListener("click", () => this.prev());
+      this.nextBtn.addEventListener("click", () => this.next());
+
+      // Navegación con teclado
+      document.addEventListener("keydown", (e) => {
+        if (
+          !this.slider.closest("#modal-overlay")?.classList.contains("hidden")
+        ) {
+          if (e.key === "ArrowLeft") this.prev();
+          if (e.key === "ArrowRight") this.next();
+        }
+      });
+
+      // Mostrar controles al hacer hover en el slider
+      this.slider.addEventListener("mouseenter", () => {
+        this.prevBtn.style.opacity = "1";
+        this.nextBtn.style.opacity = "1";
+      });
+
+      this.slider.addEventListener("mouseleave", () => {
+        this.prevBtn.style.opacity = "0";
+        this.nextBtn.style.opacity = "0";
+      });
+    }
+
+    public setImages(images: string[], title: string = ""): void {
+      this.images = images;
+      this.currentIndex = 0;
+
+      this.createThumbnails();
+      this.updateDisplay();
+    }
+
+    private createThumbnails(): void {
+      this.thumbnailsContainer.innerHTML = "";
+
+      this.images.forEach((image, index) => {
+        const thumbnail = document.createElement("img");
+        thumbnail.src = image;
+        thumbnail.alt = `Imagen ${index + 1}`;
+        thumbnail.className = `
+            w-16 h-16 object-cover rounded-lg cursor-pointer transition-all duration-300
+            hover:scale-110 hover:shadow-lg flex-shrink-0
+            ${index === this.currentIndex ? "ring-2 ring-emerald-400 scale-105" : "opacity-70 hover:opacity-100"}
+          `;
+
+        thumbnail.addEventListener("click", () => {
+          this.currentIndex = index;
+          this.updateDisplay();
+        });
+
+        this.thumbnailsContainer.appendChild(thumbnail);
+      });
+    }
+
+    private updateDisplay(): void {
+      if (this.images.length === 0) return;
+
+      // Actualizar imagen principal con efecto de fade
+      this.mainImage.style.opacity = "0";
+
+      setTimeout(() => {
+        this.mainImage.src = this.images[this.currentIndex];
+        this.mainImage.alt = `Imagen ${this.currentIndex + 1}`;
+        this.mainImage.style.opacity = "1";
+      }, 150);
+
+      // Actualizar contador
+      this.counter.textContent = `${this.currentIndex + 1} / ${this.images.length}`;
+
+      // Actualizar thumbnails
+      const thumbnails = this.thumbnailsContainer.querySelectorAll("img");
+      thumbnails.forEach((thumb, index) => {
+        if (index === this.currentIndex) {
+          thumb.className = thumb.className
+            .replace("opacity-70", "")
+            .replace("scale-105", "");
+          thumb.className += " ring-2 ring-emerald-400 scale-105 opacity-100";
+        } else {
+          thumb.className = thumb.className.replace(
+            "ring-2 ring-emerald-400 scale-105",
+            ""
+          );
+          thumb.className += " opacity-70";
+        }
+      });
+
+      // Scroll hacia el thumbnail activo
+      const activeThumbnail = thumbnails[this.currentIndex] as HTMLElement;
+      if (activeThumbnail) {
+        activeThumbnail.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+    }
+
+    private prev(): void {
+      this.currentIndex =
+        this.currentIndex > 0 ? this.currentIndex - 1 : this.images.length - 1;
+      this.updateDisplay();
+    }
+
+    private next(): void {
+      this.currentIndex =
+        this.currentIndex < this.images.length - 1 ? this.currentIndex + 1 : 0;
+      this.updateDisplay();
+    }
+  }
+
+  // Inicializar slider globalmente
+  const imageSlider = new ImageSlider();
+
+  // Exponer en window para uso global
+  (window as any).imageSlider = imageSlider;
+</script>
+
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  #slider-main-image {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Animación suave para los controles */
+  #slider-prev,
+  #slider-next {
+    transition:
+      opacity 0.3s ease,
+      transform 0.2s ease;
+  }
+
+  #slider-prev:hover,
+  #slider-next:hover {
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    #slider-prev,
+    #slider-next {
+      opacity: 1 !important;
+      width: 40px;
+      height: 40px;
+    }
+
+    #thumbnails-container img {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
+</style>

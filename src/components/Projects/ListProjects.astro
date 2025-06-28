@@ -1,0 +1,235 @@
+---
+import { Image } from "astro:assets";
+import { projects } from "./data";
+import Modal from "../Modal.astro";
+---
+
+<section
+  class="py-1 px-4 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen pb-32"
+  id="projects-section"
+>
+  <div class="max-w-7xl mx-auto">
+    <!-- Grid responsivo -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+      id="projects-grid"
+    >
+      {
+        projects.map((project, index) => (
+          <article
+            class="project-card group cursor-pointer opacity-0 translate-y-24 scale-95"
+            data-index={index}
+            data-project={JSON.stringify(project)}
+          >
+            <div class="relative bg-white rounded-2xl overflow-hidden h-80 md:h-96 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 hover:scale-105">
+              {/* <!-- Imagen principal --> */}
+              <div class="relative h-full overflow-hidden">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  width={1900}
+                  height={700}
+                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
+                />
+
+                {/* <!-- Overlays graduales --> */}
+                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-500" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              </div>
+
+              {/* <!-- Indicador de hover --> */}
+              <div class="absolute top-4 left-4 w-2 h-2 bg-emerald-400 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-150" />
+
+              {/* <!-- Indicador de galería --> */}
+              {project.images && project.images.length > 0 && (
+                <div class="absolute top-4 right-4 bg-black/40 text-white px-2 py-1 rounded-full text-xs backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500">
+                  <svg
+                    class="w-4 h-4 inline mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  {project.images.length + 1}
+                </div>
+              )}
+
+              {/* <!-- Contenido de texto --> */}
+              <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform transition-all duration-500 group-hover:translate-y-0">
+                <div class="transform transition-all duration-500 group-hover:translate-y-[-8px]">
+                  <h3 class="text-lg md:text-xl lg:text-2xl font-bold mb-2 line-clamp-2 group-hover:text-emerald-300 transition-colors duration-300">
+                    {project.title}
+                  </h3>
+                  {project.client && (
+                    <p class="text-sm uppercase font-semibold tracking-wider text-emerald-400 opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+                      {project.client}
+                    </p>
+                  )}
+                </div>
+
+                {/* <!-- Línea decorativa que aparece en hover --> */}
+                <div class="w-0 h-0.5 bg-gradient-to-r from-emerald-400 to-blue-400 mt-3 group-hover:w-full transition-all duration-700 ease-out" />
+              </div>
+
+              {/* <!-- Efecto de brillo en hover --> */}
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div class="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent transform rotate-12 group-hover:left-[100%] transition-all duration-1000 ease-out" />
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Incluir el Modal -->
+<Modal />
+
+<script>
+  // Variable para controlar si ya se animó
+  let hasAnimated = false;
+
+  // Función para verificar si el elemento está en viewport
+  function isInViewport(element: any, threshold = 0.2) {
+    const rect = element.getBoundingClientRect();
+    const windowHeight =
+      window.innerHeight || document.documentElement.clientHeight;
+    return rect.top <= windowHeight * (1 - threshold);
+  }
+
+  // Función para animar todos los elementos al mismo tiempo
+  function animateAllCards() {
+    if (hasAnimated) return;
+
+    const cards = document.querySelectorAll(".project-card");
+
+    cards.forEach((card: any, index) => {
+      // Pequeño delay escalonado para un efecto visual sutil
+      const delay = index * 100; // 100ms entre cada tarjeta
+
+      setTimeout(() => {
+        card.style.transition = "all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1)";
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0) scale(1)";
+      }, delay);
+    });
+
+    hasAnimated = true;
+  }
+
+  // Observer para detectar cuando la sección entra en viewport
+  function handleScroll() {
+    const projectsSection = document.getElementById("projects-section");
+
+    if (projectsSection && isInViewport(projectsSection, 0.3)) {
+      animateAllCards();
+    }
+  }
+
+  // Función para abrir el modal con las imágenes del proyecto
+  function openProjectModal(projectData: any) {
+    const project = JSON.parse(projectData);
+
+    // Preparar todas las imágenes (imagen principal + galería)
+    let allImages: string[] = [];
+
+    // Agregar imagen principal
+    if (project.image) {
+      allImages.push(project.image);
+    }
+
+    // Agregar imágenes de la galería
+    if (project.images && project.images.length > 0) {
+      // Evitar duplicados
+      project.images.forEach((img: string) => {
+        if (!allImages.includes(img)) {
+          allImages.push(img);
+        }
+      });
+    }
+
+    // Abrir modal con las imágenes
+    if ((window as any).openModal) {
+      (window as any).openModal({
+        title: project.title,
+        images: allImages, // Ahora pasamos las imágenes correctamente
+      });
+    }
+  }
+
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener("astro:page-load", () => {
+    // Reset del estado de animación
+    hasAnimated = false;
+
+    // Configurar estado inicial de las cards
+    const cards = document.querySelectorAll(".project-card");
+    cards.forEach((card: any) => {
+      card.style.opacity = "0";
+      card.style.transform = "translateY(96px) scale(0.95)";
+
+      // Agregar event listener para abrir modal
+      card.addEventListener("click", (e: Event) => {
+        e.preventDefault();
+        const projectData = card.getAttribute("data-project");
+        if (projectData) {
+          openProjectModal(projectData);
+        }
+      });
+    });
+
+    // Ejecutar la primera verificación
+    handleScroll();
+
+    // Agregar listener de scroll con throttling
+    let ticking = false;
+    function requestTick() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener("scroll", requestTick);
+    window.addEventListener("resize", requestTick);
+  });
+</script>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Fallback para navegadores que no soporten backdrop-filter */
+  @supports not (backdrop-filter: blur(10px)) {
+    .project-card .absolute.inset-0.bg-black\/20 {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  /* Optimización para dispositivos móviles */
+  @media (max-width: 768px) {
+    .project-card .group-hover\:scale-110 {
+      transition: transform 0.2s ease-out;
+    }
+  }
+
+  /* Cursor pointer mejorado */
+  .project-card:hover {
+    cursor: pointer;
+  }
+</style>

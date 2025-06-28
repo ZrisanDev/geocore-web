@@ -1,0 +1,682 @@
+---
+// Header.astro
+import { Image } from "astro:assets";
+// Importa tus logos - ajusta las rutas según tu estructura de carpetas
+import logoDefault from "../assets/images/logo/logo.webp"; // Logo inicial (transparente)
+import logoScroll from "../assets/images/logo/logo-scroll.webp"; // Logo para cuando hay scroll (oscuro)
+
+// Obtener la URL actual para marcar la página activa
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  id="header"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out -translate-y-8 opacity-0"
+  style="backdrop-filter: blur(0px); transition: all 0.3s ease-in-out;"
+>
+  <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 lg:h-20">
+      <!-- Logo -->
+      <div
+        id="logo-container"
+        class="flex-shrink-0 relative -translate-y-4 opacity-0"
+      >
+        <a href="/" class="flex items-center">
+          <!-- Logo por defecto (visible al inicio) -->
+          <Image
+            id="logo-default"
+            src={logoDefault}
+            alt="Logo de la empresa"
+            width={900}
+            height={300}
+            class="w-32 h-12 lg:w-40 lg:h-16 object-contain transition-opacity duration-300 ease-in-out hover:scale-105 transform"
+            style="transition: opacity 0.3s ease-in-out;"
+            loading="eager"
+          />
+          <!-- Logo para scroll (oculto al inicio) -->
+          <Image
+            id="logo-scroll"
+            src={logoScroll}
+            alt="Logo de la empresa"
+            width={900}
+            height={300}
+            class="w-32 h-12 lg:w-40 lg:h-16 object-contain transition-opacity duration-300 ease-in-out absolute top-0 left-0 opacity-0 hover:scale-105 transform"
+            style="transition: opacity 0.3s ease-in-out;"
+            loading="eager"
+          />
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:block">
+        <div
+          id="nav-links"
+          class="ml-10 flex items-baseline space-x-8 -translate-y-4 opacity-0"
+        >
+          <a
+            href="/"
+            class={`nav-link ${currentPath === "/" ? "nav-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 hover:scale-105 transform relative before:absolute before:bottom-0 before:left-0 before:w-0 before:h-0.5 before:bg-[#50a9b3] before:transition-all before:duration-300 hover:before:w-full`}
+            style={`transition: all 0.3s ease-in-out; ${currentPath === "/" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+          >
+            Inicio
+          </a>
+          <a
+            href="/nosotros"
+            class={`nav-link ${currentPath === "/nosotros" ? "nav-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 hover:scale-105 transform relative before:absolute before:bottom-0 before:left-0 before:w-0 before:h-0.5 before:bg-[#50a9b3] before:transition-all before:duration-300 hover:before:w-full`}
+            style={`transition: all 0.3s ease-in-out; ${currentPath === "/nosotros" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+          >
+            Nosotros
+          </a>
+          <a
+            href="/proyectos"
+            class={`nav-link ${currentPath === "/proyectos" ? "nav-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 hover:scale-105 transform relative before:absolute before:bottom-0 before:left-0 before:w-0 before:h-0.5 before:bg-[#50a9b3] before:transition-all before:duration-300 hover:before:w-full`}
+            style={`transition: all 0.3s ease-in-out; ${currentPath === "/proyectos" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+          >
+            Proyectos
+          </a>
+          <a
+            href="/servicios"
+            class={`nav-link ${currentPath === "/servicios" ? "nav-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 hover:scale-105 transform relative before:absolute before:bottom-0 before:left-0 before:w-0 before:h-0.5 before:bg-[#50a9b3] before:transition-all before:duration-300 hover:before:w-full`}
+            style={`transition: all 0.3s ease-in-out; ${currentPath === "/servicios" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+          >
+            Servicios
+          </a>
+          <a
+            href="/equipos"
+            class={`nav-link ${currentPath === "/equipos" ? "nav-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 hover:scale-105 transform relative before:absolute before:bottom-0 before:left-0 before:w-0 before:h-0.5 before:bg-[#50a9b3] before:transition-all before:duration-300 hover:before:w-full`}
+            style={`transition: all 0.3s ease-in-out; ${currentPath === "/equipos" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+          >
+            Equipos
+          </a>
+          <!-- <a 
+            href="/noticias" 
+            class={`nav-link ${currentPath === '/noticias' ? 'nav-active text-[#50a9b3] font-semibold' : ''} text-white hover:text-[#50a9b3] px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 hover:scale-105 transform relative before:absolute before:bottom-0 before:left-0 before:w-0 before:h-0.5 before:bg-[#50a9b3] before:transition-all before:duration-300 hover:before:w-full`}
+            style={`transition: all 0.3s ease-in-out; ${currentPath === '/noticias' ? 'color: #50a9b3; font-weight: 600;' : ''}`}
+          >
+            Noticias
+          </a> -->
+          <a
+            href="/contactanos"
+            class={`nav-link ${currentPath === "/contactanos" ? "nav-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 hover:scale-105 transform relative before:absolute before:bottom-0 before:left-0 before:w-0 before:h-0.5 before:bg-[#50a9b3] before:transition-all before:duration-300 hover:before:w-full`}
+            style={`transition: all 0.3s ease-in-out; ${currentPath === "/contactanos" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+          >
+            Contáctenos
+          </a>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button
+          id="mobile-menu-button"
+          type="button"
+          class="mobile-menu-btn text-white inline-flex items-center justify-center p-2 rounded-md transition-all duration-300 relative z-[70] hover:bg-white/10 hover:scale-110 transform -translate-y-4 opacity-0"
+          style="transition: all 0.3s ease-in-out;"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Abrir menú principal</span>
+          <!-- Hamburger lines -->
+          <div class="w-6 h-6 relative">
+            <div
+              id="line1"
+              class="absolute w-6 h-0.5 bg-current top-1 left-0 transition-all duration-300 ease-in-out"
+              style="transition: all 0.3s ease-in-out;"
+            >
+            </div>
+            <div
+              id="line2"
+              class="absolute w-6 h-0.5 bg-current top-3 left-0 transition-all duration-300 ease-in-out"
+              style="transition: all 0.3s ease-in-out;"
+            >
+            </div>
+            <div
+              id="line3"
+              class="absolute w-6 h-0.5 bg-current top-5 left-0 transition-all duration-300 ease-in-out"
+              style="transition: all 0.3s ease-in-out;"
+            >
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Mobile Navigation Menu Fullscreen -->
+<div
+  id="mobile-menu"
+  class="md:hidden fixed inset-0 z-[60] opacity-0 invisible transition-all duration-300 ease-in-out"
+  style="transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;"
+>
+  <div
+    class="mobile-menu-overlay absolute inset-0 bg-black bg-opacity-95 backdrop-blur-md"
+    style="transition: opacity 0.3s ease-in-out;"
+  >
+  </div>
+
+  <div
+    class="mobile-menu-container relative z-10 flex flex-col justify-center items-center h-full px-8"
+  >
+    <!-- Logo en el menú móvil -->
+    <div class="absolute top-8 left-4">
+      <Image
+        src={logoDefault}
+        alt="Logo de la empresa"
+        width={1000}
+        height={300}
+        class="w-32 h-12 object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
+        loading="lazy"
+      />
+    </div>
+
+    <!-- Enlaces del menú -->
+    <nav class="flex flex-col items-center space-y-6">
+      <a
+        href="/"
+        class={`mobile-link ${currentPath === "/" ? "mobile-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] text-2xl lg:text-3xl font-light tracking-wide transition-all duration-300 transform hover:scale-110 opacity-0 translate-y-8 relative`}
+        style={`transition: all 0.3s ease-in-out; position: relative; ${currentPath === "/" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+      >
+        Inicio
+      </a>
+      <a
+        href="/nosotros"
+        class={`mobile-link ${currentPath === "/nosotros" ? "mobile-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] text-2xl lg:text-3xl font-light tracking-wide transition-all duration-300 transform hover:scale-110 opacity-0 translate-y-8 relative`}
+        style={`transition: all 0.3s ease-in-out; position: relative; ${currentPath === "/nosotros" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+      >
+        Nosotros
+      </a>
+      <a
+        href="/proyectos"
+        class={`mobile-link ${currentPath === "/proyectos" ? "mobile-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] text-2xl lg:text-3xl font-light tracking-wide transition-all duration-300 transform hover:scale-110 opacity-0 translate-y-8 relative`}
+        style={`transition: all 0.3s ease-in-out; position: relative; ${currentPath === "/proyectos" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+      >
+        Proyectos
+      </a>
+      <a
+        href="/servicios"
+        class={`mobile-link ${currentPath === "/servicios" ? "mobile-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] text-2xl lg:text-3xl font-light tracking-wide transition-all duration-300 transform hover:scale-110 opacity-0 translate-y-8 relative`}
+        style={`transition: all 0.3s ease-in-out; position: relative; ${currentPath === "/servicios" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+      >
+        Servicios
+      </a>
+      <a
+        href="/equipos"
+        class={`mobile-link ${currentPath === "/equipos" ? "mobile-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] text-2xl lg:text-3xl font-light tracking-wide transition-all duration-300 transform hover:scale-110 opacity-0 translate-y-8 relative`}
+        style={`transition: all 0.3s ease-in-out; position: relative; ${currentPath === "/equipos" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+      >
+        Equipos
+      </a>
+      <!-- <a 
+        href="/noticias" 
+        class={`mobile-link ${currentPath === '/noticias' ? 'mobile-active text-[#50a9b3] font-semibold' : ''} text-white hover:text-[#50a9b3] text-2xl lg:text-3xl font-light tracking-wide transition-all duration-300 transform hover:scale-110 opacity-0 translate-y-8 relative`}
+        style={`transition: all 0.3s ease-in-out; position: relative; ${currentPath === '/noticias' ? 'color: #50a9b3; font-weight: 600;' : ''}`}
+      >
+        Noticias
+      </a> -->
+      <a
+        href="/contactanos"
+        class={`mobile-link ${currentPath === "/contactanos" ? "mobile-active text-[#50a9b3] font-semibold" : ""} text-white hover:text-[#50a9b3] text-2xl lg:text-3xl font-light tracking-wide transition-all duration-300 transform hover:scale-110 opacity-0 translate-y-8 relative`}
+        style={`transition: all 0.3s ease-in-out; position: relative; ${currentPath === "/contactanos" ? "color: #50a9b3; font-weight: 600;" : ""}`}
+      >
+        Contáctenos
+      </a>
+    </nav>
+
+    <!-- Botón de cerrar -->
+    <button
+      id="close-mobile-menu"
+      class="absolute top-8 right-8 text-white text-3xl transition-all duration-300 opacity-0 w-12 h-12 flex items-center justify-center hover:bg-white/10 rounded-full hover:scale-110 transform"
+      aria-label="Cerrar menú"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M18 6L6 18"></path>
+        <path d="M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- TypeScript Script -->
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  class HeaderController {
+    state;
+    elements;
+
+    constructor() {
+      this.state = {
+        isMenuOpen: false,
+        isScrolled: false,
+        currentPath: window.location.pathname,
+      };
+
+      this.elements = this.getElements();
+
+      this.init();
+    }
+
+    getElements() {
+      return {
+        header: document.getElementById("header"),
+        logoDefault: document.getElementById("logo-default"),
+        logoScroll: document.getElementById("logo-scroll"),
+        logoContainer: document.getElementById("logo-container"),
+        navLinks: document.getElementById("nav-links"),
+        mobileMenuButton: document.getElementById("mobile-menu-button"),
+        mobileMenu: document.getElementById("mobile-menu"),
+        closeButton: document.getElementById("close-mobile-menu"),
+        hamburgerLines: document.querySelectorAll("#line1, #line2, #line3"),
+        navLinksElements: document.querySelectorAll(".nav-link"),
+        mobileLinksElements: document.querySelectorAll(".mobile-link"),
+        overlay: document.querySelector(".mobile-menu-overlay"),
+      };
+    }
+
+    init() {
+      this.registerGSAP();
+      this.setupInitialAnimations();
+      this.setupScrollTrigger();
+      this.setupEventListeners();
+      this.highlightActiveLink();
+    }
+
+    registerGSAP() {
+      gsap.registerPlugin(ScrollTrigger);
+    }
+
+    setupInitialAnimations() {
+      // Animación suave desde arriba - fade in
+      gsap.fromTo(
+        this.elements.header,
+        {
+          y: -10,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          delay: 0.2,
+        }
+      );
+
+      // Logo aparece suavemente
+      gsap.fromTo(
+        this.elements.logoContainer,
+        {
+          y: -8,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.3,
+          ease: "power2.out",
+          delay: 0.3,
+        }
+      );
+
+      // Enlaces de navegación aparecen suavemente
+      gsap.fromTo(
+        this.elements.navLinks,
+        {
+          y: -8,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out",
+          delay: 0.3,
+        }
+      );
+
+      // Botón móvil aparece suavemente
+      gsap.fromTo(
+        this.elements.mobileMenuButton,
+        {
+          y: -8,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power2.out",
+          delay: 0.3,
+        }
+      );
+
+      // Enlaces individuales con stagger sutil
+      gsap.fromTo(
+        this.elements.navLinksElements,
+        { y: -5, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.4,
+          stagger: 0.08,
+          ease: "power2.out",
+          delay: 0.4,
+        }
+      );
+    }
+
+    setupScrollTrigger() {
+      ScrollTrigger.create({
+        trigger: "body",
+        start: "top -50",
+        end: "bottom bottom",
+        onUpdate: (self) => {
+          const shouldBeScrolled = self.scroll() > 50;
+
+          if (shouldBeScrolled !== this.state.isScrolled) {
+            this.state.isScrolled = shouldBeScrolled;
+            this.handleScrollChange();
+          }
+        },
+      });
+    }
+
+    handleScrollChange() {
+      if (!this.elements.header) return;
+
+      if (this.state.isScrolled) {
+        // Aplicar estilo con scroll
+        gsap.to(this.elements.header, {
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(12px)",
+          boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+          duration: 0.2,
+          ease: "power2.out",
+        });
+
+        this.switchLogos(true);
+        this.switchTextColors(true);
+      } else {
+        // Aplicar estilo sin scroll
+        gsap.to(this.elements.header, {
+          backgroundColor: "transparent",
+          backdropFilter: "blur(0px)",
+          boxShadow: "none",
+          duration: 0.2,
+          ease: "power2.out",
+        });
+
+        this.switchLogos(false);
+        this.switchTextColors(false);
+      }
+    }
+
+    switchLogos(showScrollVersion = false) {
+      if (!this.elements.logoDefault || !this.elements.logoScroll) return;
+
+      if (showScrollVersion) {
+        gsap.to(this.elements.logoDefault, { opacity: 0, duration: 0.2 });
+        gsap.to(this.elements.logoScroll, { opacity: 1, duration: 0.2 });
+      } else {
+        gsap.to(this.elements.logoDefault, { opacity: 1, duration: 0.2 });
+        gsap.to(this.elements.logoScroll, { opacity: 0, duration: 0.2 });
+      }
+    }
+
+    switchTextColors(isDark = false) {
+      const normalColor = isDark ? "#1f2937" : "#ffffff";
+      const activeColor = "#50a9b3"; // Color para página activa
+      const hoverColor = "#50a9b3";
+
+      this.elements.navLinksElements.forEach((link) => {
+        const isActive = link.classList.contains("nav-active");
+        const targetColor = isActive ? activeColor : normalColor;
+
+        // Aplicar color inicial
+        gsap.to(link, { color: targetColor, duration: 0.2 });
+
+        // Configurar hover events
+        onmouseenter = () =>
+          gsap.to(link, { color: hoverColor, duration: 0.2 });
+        onmouseleave = () =>
+          gsap.to(link, { color: targetColor, duration: 0.2 });
+      });
+
+      // Para el botón del menú móvil
+      if (this.elements.mobileMenuButton && !this.state.isMenuOpen) {
+        gsap.to(this.elements.mobileMenuButton, {
+          color: normalColor,
+          duration: 0.2,
+        });
+      }
+    }
+
+    highlightActiveLink() {
+      this.elements.navLinksElements.forEach((link) => {
+        const href = link.getAttribute("href");
+        if (href === this.state.currentPath) {
+          link.classList.add("nav-active");
+          // Aplicar color activo inmediatamente
+          gsap.set(link, { color: "#50a9b3" });
+        }
+      });
+
+      this.elements.mobileLinksElements.forEach((link) => {
+        const href = link.getAttribute("href");
+        if (href === this.state.currentPath) {
+          link.classList.add("mobile-active");
+          // Aplicar color activo inmediatamente
+          gsap.set(link, { color: "#50a9b3" });
+        }
+      });
+    }
+
+    animateHamburger(toX = false) {
+      const [line1, line2, line3] = Array.from(this.elements.hamburgerLines);
+
+      if (toX) {
+        gsap.to(line1, {
+          rotation: 45,
+          y: 8,
+          duration: 0.2,
+          ease: "power2.inOut",
+        });
+        gsap.to(line2, { opacity: 0, duration: 0.2, ease: "power2.inOut" });
+        gsap.to(line3, {
+          rotation: -45,
+          y: -8,
+          duration: 0.2,
+          ease: "power2.inOut",
+        });
+      } else {
+        gsap.to(line1, {
+          rotation: 0,
+          y: 0,
+          duration: 0.2,
+          ease: "power2.inOut",
+        });
+        gsap.to(line2, { opacity: 1, duration: 0.2, ease: "power2.inOut" });
+        gsap.to(line3, {
+          rotation: 0,
+          y: 0,
+          duration: 0.2,
+          ease: "power2.inOut",
+        });
+      }
+    }
+
+    animateFullscreenMenu(show = true) {
+      if (!this.elements.mobileMenu) return;
+
+      if (show) {
+        // Mostrar menú
+        gsap.set(this.elements.mobileMenu, { visibility: "visible" });
+        gsap.to(this.elements.mobileMenu, { opacity: 1, duration: 0.2 });
+        document.body.style.overflow = "hidden";
+
+        // Cambiar color del botón hamburguesa a blanco
+        if (this.elements.mobileMenuButton) {
+          gsap.to(this.elements.mobileMenuButton, {
+            color: "#ffffff",
+            duration: 0.2,
+          });
+        }
+
+        // Animar enlaces con delay escalonado
+        gsap.fromTo(
+          this.elements.mobileLinksElements,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "back.out(1.2)",
+            delay: 0.2,
+          }
+        );
+
+        // Animar botón de cerrar
+        if (this.elements.closeButton) {
+          gsap.fromTo(
+            this.elements.closeButton,
+            { opacity: 0, scale: 0 },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.3,
+              ease: "back.out(1.7)",
+              delay: 0.3,
+            }
+          );
+        }
+      } else {
+        // Ocultar enlaces
+        gsap.to(this.elements.mobileLinksElements, {
+          opacity: 0,
+          y: -20,
+          duration: 0.2,
+          stagger: 0.05,
+        });
+
+        // Ocultar botón de cerrar
+        if (this.elements.closeButton) {
+          gsap.to(this.elements.closeButton, {
+            opacity: 0,
+            scale: 0,
+            duration: 0.3,
+          });
+        }
+
+        // Ocultar menú
+        gsap.to(this.elements.mobileMenu, {
+          opacity: 0,
+          duration: 0.2,
+          delay: 0.1,
+          onComplete: () => {
+            gsap.set(this.elements.mobileMenu, { visibility: "hidden" });
+          },
+        });
+
+        document.body.style.overflow = "";
+
+        // Restaurar color del botón hamburguesa según el estado del scroll
+        if (this.elements.mobileMenuButton) {
+          const color = this.state.isScrolled ? "#1f2937" : "#ffffff";
+          gsap.to(this.elements.mobileMenuButton, {
+            color: color,
+            duration: 0.3,
+          });
+        }
+      }
+    }
+
+    closeMenu() {
+      if (this.state.isMenuOpen) {
+        this.state.isMenuOpen = false;
+        this.animateHamburger(false);
+        this.animateFullscreenMenu(false);
+
+        if (this.elements.mobileMenuButton) {
+          this.elements.mobileMenuButton.setAttribute("aria-expanded", "false");
+        }
+      }
+    }
+
+    openMenu() {
+      if (!this.state.isMenuOpen) {
+        this.state.isMenuOpen = true;
+        this.animateHamburger(true);
+        this.animateFullscreenMenu(true);
+
+        if (this.elements.mobileMenuButton) {
+          this.elements.mobileMenuButton.setAttribute("aria-expanded", "true");
+        }
+      }
+    }
+
+    setupEventListeners() {
+      // Click en el botón del menú
+      this.elements.mobileMenuButton?.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (this.state.isMenuOpen) {
+          this.closeMenu();
+        } else {
+          this.openMenu();
+        }
+      });
+
+      // Click en el botón de cerrar
+      this.elements.closeButton?.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.closeMenu();
+      });
+
+      // Cerrar menú al hacer clic en un enlace móvil
+      this.elements.mobileLinksElements.forEach((link) => {
+        link.addEventListener("click", () => {
+          this.closeMenu();
+        });
+      });
+
+      // Cerrar menú con tecla Escape
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && this.state.isMenuOpen) {
+          this.closeMenu();
+        }
+      });
+
+      // Cerrar menú al hacer clic en el overlay
+      this.elements.overlay?.addEventListener("click", () => {
+        this.closeMenu();
+      });
+
+      // Manejar cambio de tamaño de ventana
+      window.addEventListener("resize", () => {
+        if (window.innerWidth >= 768 && this.state.isMenuOpen) {
+          this.closeMenu();
+        }
+      });
+    }
+  }
+
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener("astro:page-load", () => {
+    new HeaderController();
+  });
+</script>

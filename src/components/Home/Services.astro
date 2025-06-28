@@ -1,0 +1,202 @@
+---
+const services = [
+  {
+    id: 1,
+    title: "CONSULTORÍA",
+    description:
+      "Asesoría técnica especializada en estudios y evaluaciones geotécnicas, ambientales, topográficas y de control de calidad, tanto en laboratorio como en campo.",
+  },
+  {
+    id: 2,
+    title: "ENSAYOS EN ROCAS",
+    description:
+      "Pruebas de laboratorio enfocadas en caracterizar las propiedades físicas y mecánicas de las rocas, esenciales para el diseño y análisis de obras geotécnicas y estructurales.",
+  },
+  {
+    id: 3,
+    title: "ENSAYOS DE SUELOS",
+    description:
+      "Evaluación del comportamiento físico y mecánico de los suelos mediante pruebas de laboratorio, clave para la clasificación y análisis de estabilidad y capacidad de carga del terreno.",
+  },
+  {
+    id: 4,
+    title: "ENSAYOS DE GEOSINTÉTICOS",
+    description:
+      "Análisis de materiales geosintéticos utilizados en obras de ingeniería civil, evaluando su resistencia, interacción con suelos y características físicas.",
+  },
+  {
+    id: 5,
+    title: "ENSAYOS DE AGREGADOS",
+    description:
+      "Pruebas destinadas a determinar las propiedades de agregados utilizados en la construcción, como resistencia a la abrasión y durabilidad.",
+  },
+  {
+    id: 6,
+    title: "ENSAYOS QUÍMICOS",
+    description:
+      "Análisis químicos del suelo y materiales relacionados para identificar componentes que puedan afectar la estabilidad o durabilidad de una obra.",
+  },
+  {
+    id: 7,
+    title: "ENSAYOS DE CAMPO",
+    description:
+      "Pruebas realizadas directamente en el terreno para evaluar condiciones in situ del suelo, su resistencia, densidad y distribución granulométrica.",
+  },
+];
+---
+
+<section class="services-section py-12 px-4 sm:px-6 lg:px-8 bg-gray-100">
+  <div class="max-w-7xl mx-auto">
+    <!-- Título -->
+    <h2
+      class="services-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center mb-8 sm:mb-12 lg:mb-16 text-[#26656c] px-4 opacity-0 translate-y-8"
+    >
+      NUESTROS SERVICIOS
+    </h2>
+
+    <!-- Contenedor principal -->
+    <div
+      class="services-container relative px-4 sm:px-8 opacity-0 translate-y-8"
+    >
+      <!-- Botones de navegación desktop -->
+      <button
+        class="nav-btn nav-prev hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg items-center justify-center transition-colors duration-200 -ml-6 cursor-pointer border border-[#26656c]"
+        aria-label="Servicio anterior"
+        disabled
+      >
+        <svg
+          class="w-6 h-6 text-[#26656c]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+
+      <button
+        class="nav-btn nav-next hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg items-center justify-center transition-colors duration-200 -mr-6 cursor-pointer border border-[#26656c]"
+        aria-label="Siguiente servicio"
+      >
+        <svg
+          class="w-6 h-6 text-[#26656c]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+
+      <!-- Contenedor de servicios -->
+      <div class="services-wrapper overflow-hidden pb-5">
+        <div
+          class="services-track flex transition-transform duration-500 ease-in-out"
+        >
+          {
+            services.map((service) => (
+              <div class="service-slide flex-none w-full md:w-1/2 lg:w-1/3 px-2 sm:px-3">
+                <div class="service-card bg-white rounded-2xl p-6 sm:p-8 h-full shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col min-h-[400px] sm:min-h-[450px]">
+                  <div class="flex items-center justify-between mb-6">
+                    <div />
+                    <span class="service-number text-4xl sm:text-5xl lg:text-6xl font-light text-[#26656c]/50">
+                      {service.id.toString().padStart(2, "0")}
+                    </span>
+                  </div>
+                  <h3 class="service-title text-lg sm:text-xl font-bold text-gray-900 mb-4 leading-tight">
+                    {service.title.includes(" ") ? (
+                      <Fragment>
+                        {service.title.split(" ").slice(0, -1).join(" ")}
+                        <br />
+                        {service.title.split(" ").slice(-1)}
+                      </Fragment>
+                    ) : (
+                      service.title
+                    )}
+                  </h3>
+                  <p class="service-description text-gray-600 mb-6 sm:mb-8 text-sm leading-relaxed flex-grow">
+                    {service.description}
+                  </p>
+                  <button class="service-btn flex items-center text-gray-900 font-semibold hover:text-[#26656c] transition-colors cursor-pointer border border-transparent hover:border-[#26656c] rounded-lg p-2 mt-auto self-start">
+                    Leer más
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Indicadores de navegación móvil -->
+      <div class="services-dots flex justify-center mt-6 space-x-2 lg:hidden">
+      </div>
+
+      <!-- Botones de navegación móvil -->
+      <div class="mobile-nav flex justify-center mt-6 space-x-4 lg:hidden">
+        <button
+          class="nav-btn nav-prev-mobile w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors duration-200"
+          disabled
+        >
+          <svg
+            class="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button
+          class="nav-btn nav-next-mobile w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors duration-200"
+        >
+          <svg
+            class="w-5 h-5 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { ServicesCarousel } from "./script/ServiceCarrousel";
+
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener("astro:page-load", () => {
+    new ServicesCarousel();
+  });
+</script>

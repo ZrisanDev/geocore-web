@@ -1,0 +1,147 @@
+---
+import { Image } from 'astro:assets';
+
+// Importa tus imágenes aquí
+import img1 from '../../assets/images/machines/1.webp';
+import img2 from '../../assets/images/machines/2.webp';
+import img3 from '../../assets/images/machines/3.webp';
+import img4 from '../../assets/images/machines/4.webp';
+import img5 from '../../assets/images/machines/5.webp';
+import img6 from '../../assets/images/machines/6.webp';
+
+interface ImageProps {
+    src:ImageMetadata;
+alt:string
+title:string
+description:string
+}
+// Array de imágenes - reemplaza con tus imports reales
+const images:ImageProps[] = [
+  {
+    src: img1,
+    alt: 'Imagen 1',
+    title: 'Título de la imagen 1',
+    description: 'Descripción de la primera imagen'
+  },
+  {
+    src: img2,
+    alt: 'Imagen 2',
+    title: 'Título de la imagen 2',
+    description: 'Descripción de la segunda imagen'
+  },
+  {
+    src: img3,
+    alt: 'Imagen 3',
+    title: 'Título de la imagen 3',
+    description: 'Descripción de la tercera imagen'
+  },
+  {
+    src: img4,
+    alt: 'Imagen 4',
+    title: 'Título de la imagen 4',
+    description: 'Descripción de la cuarta imagen'
+  },
+  {
+    src: img5,
+    alt: 'Imagen 5',
+    title: 'Título de la imagen 5',
+    description: 'Descripción de la quinta imagen'
+  },
+  {
+    src: img6,
+    alt: 'Imagen 6',
+    title: 'Título de la imagen 6',
+    description: 'Descripción de la sexta imagen'
+  }
+];
+---
+
+<section class="py-16 px-4 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <div class="max-w-7xl mx-auto">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {images.map((image, index) => (
+          <div 
+            class="image-card group cursor-pointer"
+            data-index={index}
+          >
+            <div class="relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-300 hover:shadow-2xl">
+              <!-- Imagen -->
+              <div class="overflow-hidden rounded-xl">
+                <Image
+                width={1000}
+                height={800}
+                  src={image.src}
+                  alt={image.alt}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 rounded-xl"
+                  loading="lazy"
+                />
+              </div>
+              
+              <!-- Overlay con información -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <h3 class="text-xl font-semibold mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    {image.title}
+                  </h3>
+                  <p class="text-sm opacity-90 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">
+                    {image.description}
+                  </p>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <script is:inline>
+  
+    gsap.registerPlugin(ScrollTrigger);
+  
+    document.addEventListener('astro:page-load', () => {
+      // Animación fade in con escala suave para las cards
+      gsap.set('.image-card', {
+        opacity: 0,
+        scale: 0.8
+      });
+  
+      gsap.to('.image-card', {
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        stagger: 0.2,
+        ease: 'back.out(1.2)',
+        scrollTrigger: {
+          trigger: '.image-card',
+          start: 'top 80%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    });
+  </script>
+  
+  <style>
+    /* Estilos adicionales para mejorar la experiencia */
+    .image-card {
+      will-change: transform;
+    }
+    
+    .image-card img {
+      will-change: transform;
+    }
+    
+    /* Animación de loading para las imágenes */
+  
+    
+    /* Mejora la performance en dispositivos móviles */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>

@@ -1,0 +1,314 @@
+---
+// ContactSection.astro
+---
+
+<section class="bg-white text-gray-800 p-6 md:p-8 lg:p-12 my-5" id="contacto">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <!-- Columna izquierda - Información y mapa -->
+      <div class="space-y-6" id="contactInfo">
+        <div>
+          <h2
+            class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+          >
+            CONTÁCTANOS
+          </h2>
+          <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+            La industria abarca la producción, fabricación y procesamiento de
+            bienes. Este sector es esencial
+          </p>
+        </div>
+
+        <!-- Contenedor del mapa de Google -->
+        <div
+          class="bg-gray-100 rounded-lg overflow-hidden h-64 md:h-80 border border-gray-200"
+        >
+          <!-- Opción 1: Google Maps Embed (Recomendado) -->
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6562.240446288143!2d-77.03640930225491!3d-12.048233096975899!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c8b5d35662c7%3A0x15f0bda5ccbd31eb!2sPalacio%20de%20Gobierno%20de%20la%20Rep%C3%BAblica%20del%20Per%C3%BA!5e0!3m2!1ses!2spe!4v1749102144354!5m2!1ses!2spe"
+            width="600"
+            height="450"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <!-- Información de contacto adicional -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-800">Dirección</h4>
+              <p class="text-gray-600 text-sm">Dhaka, Bangladesh</p>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-800">Teléfono</h4>
+              <p class="text-gray-600 text-sm">+880 1234 567890</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha - Formulario -->
+      <div
+        class="rounded-2xl p-6 md:p-8 border-2"
+        style="background-color: #26656c; border-color: #26656c;"
+        id="contactForm"
+      >
+        <h3 class="text-2xl md:text-3xl font-bold mb-6 text-center text-white">
+          Ponte en Contacto
+        </h3>
+
+        <form class="space-y-4" id="formContact">
+          <!-- Fila de nombre y email -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="relative">
+              <input
+                type="text"
+                name="nombre"
+                placeholder="Tu Nombre"
+                required
+                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-1 transition-colors"
+                style="background-color: rgba(255,255,255,0.1);"
+              />
+              <span class="absolute right-3 top-3 text-red-400">*</span>
+            </div>
+            <div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Tu Email"
+                required
+                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-1 transition-colors"
+                style="background-color: rgba(255,255,255,0.1);"
+              />
+            </div>
+          </div>
+
+          <!-- Campo de asunto -->
+          <div>
+            <input
+              type="text"
+              name="asunto"
+              placeholder="Asunto"
+              required
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-1 transition-colors"
+              style="background-color: rgba(255,255,255,0.1);"
+            />
+          </div>
+
+          <!-- Área de mensaje -->
+          <div>
+            <textarea
+              name="mensaje"
+              placeholder="Escribe tu mensaje aquí..."
+              rows="5"
+              required
+              class="w-full border border-gray-300 rounded-lg px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-1 transition-colors resize-none"
+              style="background-color: rgba(255,255,255,0.1);"></textarea>
+          </div>
+
+          <!-- Botón de envío -->
+          <button
+            type="submit"
+            class="w-full text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2 group hover:opacity-90"
+            style="background-color: #16141448;"
+          >
+            <span>Enviar Ahora</span>
+            <svg
+              class="w-4 h-4 group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CDN de GSAP -->
+
+<script is:inline>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  // Animaciones GSAP con ScrollTrigger
+  document.addEventListener("astro:page-load", () => {
+    // Registrar el plugin ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Configurar estados iniciales
+    gsap.set("#contactInfo", {
+      x: -100,
+      opacity: 0,
+    });
+
+    gsap.set("#contactForm", {
+      x: 100,
+      opacity: 0,
+    });
+
+    // Animación para la información de contacto (viene de la izquierda)
+    gsap.to("#contactInfo", {
+      x: 0,
+      opacity: 1,
+      duration: 1,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#contactInfo",
+        start: "top 80%",
+        end: "bottom 20%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    // Animación para el formulario (viene de la derecha)
+    gsap.to("#contactForm", {
+      x: 0,
+      opacity: 1,
+      duration: 1,
+      ease: "power2.out",
+      delay: 0.2, // Pequeño delay para crear efecto escalonado
+      scrollTrigger: {
+        trigger: "#contactForm",
+        start: "top 80%",
+        end: "bottom 20%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    // Animación adicional para los elementos internos del formulario
+    gsap.from("#contactForm h3", {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      delay: 0.4,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#contactForm",
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    gsap.from("#contactForm form > *", {
+      y: 20,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      delay: 0.6,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#contactForm",
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    // Animación para el título y descripción
+    gsap.from("#contactInfo h2", {
+      y: 50,
+      opacity: 0,
+      duration: 0.8,
+      delay: 0.2,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#contactInfo",
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    gsap.from("#contactInfo p", {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      delay: 0.4,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#contactInfo",
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    // Animación para el mapa
+    gsap.from("#contactInfo .bg-gray-100", {
+      scale: 0.9,
+      opacity: 0,
+      duration: 1,
+      delay: 0.6,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#contactInfo",
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    // Animación para la información de contacto adicional
+    gsap.from("#contactInfo .grid > div", {
+      y: 30,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.2,
+      delay: 0.8,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#contactInfo",
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+  });
+</script>

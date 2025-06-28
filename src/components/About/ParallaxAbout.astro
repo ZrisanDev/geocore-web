@@ -1,0 +1,247 @@
+---
+import { Image } from "astro:assets"
+import ImgHero from "../../assets/images/hero.webp"
+---
+
+<section class="relative overflow-hidden">
+  <!-- Hero Parallax -->
+  <div class="parallax-hero h-screen flex items-center justify-center relative">
+    <div class="hero-image absolute inset-0 z-0">
+      <Image 
+          width={3000} 
+          height={1600} 
+          src={ImgHero} 
+          alt="Geocore Ingenieros" 
+          class="parallax-bg w-full h-full object-cover"
+      />
+    </div>
+    <div class="absolute inset-0 bg-black/40 bg-opacity-50 z-10"></div>
+    
+    <!-- Hero Content -->
+    <div class="hero-content relative z-20 flex h-full items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-4xl mx-auto">
+        <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-18 leading-tight z-50">
+          Sobre Nosotros
+        </h1>
+       
+      </div>
+    </div>
+    <div class="scroll-indicator absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+      <div class="animate-bounce">
+        <svg class="w-6 h-6 text-white mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </div>
+    </div>
+</div>
+  
+    <!-- Sección NOSOTROS -->
+    <div class="section-container py-20 bg-white" id="nosotros">
+      <div class="container mx-auto px-8 grid md:grid-cols-2 gap-12 items-center">
+        <div class="content-text">
+          <h2 class="text-4xl font-bold mb-8 text-gray-800">NOSOTROS</h2>
+          <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+            Somos una empresa comprometida con la excelencia y la innovación. Durante más de una década, hemos construido relaciones sólidas con nuestros clientes, ofreciendo soluciones que transforman ideas en realidades tangibles.
+          </p>
+          <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+            Nuestro equipo está formado por profesionales apasionados que comparten una visión común: crear valor duradero a través de la calidad, la creatividad y el compromiso con cada proyecto que emprendemos.
+          </p>
+          <p class="text-lg text-gray-600 leading-relaxed">
+            La confianza que nuestros clientes depositan en nosotros es el motor que nos impulsa a superar expectativas y a mantenernos a la vanguardia de las tendencias del mercado, adaptándonos constantemente a los desafíos del mundo moderno.
+          </p>
+        </div>
+        <div class="parallax-image">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop" 
+               alt="Equipo trabajando" 
+               class="w-full h-80 object-cover rounded-lg shadow-lg">
+        </div>
+      </div>
+    </div>
+  
+    <!-- Sección MISION -->
+    <div class="section-container py-20 bg-gray-50" id="mision">
+      <div class="container mx-auto px-8 grid md:grid-cols-2 gap-12 items-center">
+        <div class="content-text">
+          <h2 class="text-4xl font-bold mb-8 text-gray-800">MISIÓN</h2>
+          <p class="text-lg text-gray-600 leading-relaxed">
+            Nuestra misión es proporcionar soluciones innovadoras y de alta calidad que superen las expectativas de nuestros clientes. Nos dedicamos a construir relaciones duraderas basadas en la confianza, la transparencia y el compromiso con la excelencia. Buscamos generar un impacto positivo en cada comunidad donde operamos, contribuyendo al crecimiento sostenible y al desarrollo de talentos excepcionales.
+          </p>
+        </div>
+        <div class="parallax-image">
+          <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop" 
+               alt="Misión empresarial" 
+               class="w-full h-80 object-cover rounded-lg shadow-lg">
+        </div>
+      </div>
+    </div>
+  
+    <!-- Sección VISION -->
+    <div class="section-container py-20 bg-white" id="vision">
+      <div class="container mx-auto px-8 grid md:grid-cols-2 gap-12 items-center">
+        <div class="content-text">
+          <h2 class="text-4xl font-bold mb-8 text-gray-800">VISIÓN</h2>
+          <p class="text-lg text-gray-600 leading-relaxed">
+            Aspiramos a ser líderes reconocidos en nuestro sector, estableciendo nuevos estándares de calidad e innovación. Visualizamos un futuro donde nuestras soluciones transformen industrias completas, creando un ecosistema de crecimiento mutuo con nuestros partners y clientes. Queremos ser la primera opción para quienes buscan excelencia, confiabilidad y visión de futuro en cada proyecto.
+          </p>
+        </div>
+        <div class="parallax-image">
+          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop" 
+               alt="Visión futuro" 
+               class="w-full h-80 object-cover rounded-lg shadow-lg">
+        </div>
+      </div>
+
+      
+    </div>
+
+   
+  </section>
+  
+  <script is:inline>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animaciones de entrada del hero (similares a Hero.astro)
+    document.addEventListener('DOMContentLoaded', () => {
+      // Timeline principal para la entrada del hero
+      const heroTL = gsap.timeline();
+      
+      // Animación de entrada del hero
+      heroTL
+        .from('.hero-image', {
+          scale: 1.2,
+          duration: 2,
+          ease: 'power2.out'
+        })
+        .from('.hero-title', {
+          opacity: 0,
+          duration: 1,
+          ease: 'power3.out'
+        }, '-=1.5')
+        .from('.hero-subtitle', {
+          y: 50,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out'
+        }, '-=0.5');
+
+      // Fade out del contenido del hero al hacer scroll
+      gsap.to('.hero-content', {
+        opacity: 0,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.parallax-hero',
+          start: 'top top',
+          end: '50% top',
+          scrub: true
+        }
+      });
+    });
+
+    // Parallax del fondo hero (fuera del event listener para evitar conflictos)
+    gsap.to('.parallax-bg', {
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.parallax-hero',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true
+      }
+    });
+  
+    // Parallax para las imágenes de cada sección
+    const parallaxImages = gsap.utils.toArray('.parallax-image img');
+    parallaxImages.forEach((img) => {
+      const htmlImg = img;
+      gsap.to(htmlImg, {
+        yPercent: -30,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: htmlImg.closest('.section-container'),
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1
+        }
+      });
+    });
+  
+    // Animación de entrada para el contenido de texto
+    const contentSections = gsap.utils.toArray('.content-text');
+    contentSections.forEach((section) => {
+      const htmlSection = section;
+      gsap.fromTo(htmlSection.children, 
+        { 
+          opacity: 0, 
+          y: 50 
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.2,
+          scrollTrigger: {
+            trigger: htmlSection,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    });
+  
+    // Efecto parallax diferencial entre secciones
+    const sectionContainers = gsap.utils.toArray('.section-container');
+    sectionContainers.forEach((section, i) => {
+      const speed = (i + 1) * 0.1;
+      gsap.to(section, {
+        yPercent: -speed * 10,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+    });
+  </script>
+  
+  <style>
+    .parallax-bg {
+      will-change: transform;
+    }
+    
+    .parallax-image img {
+      will-change: transform;
+    }
+  
+    .section-container {
+      will-change: transform;
+    }
+
+    /* Estilos adicionales del hero */
+    .hero-image {
+      background: #000;
+    }
+    
+    /* Asegurar que el hero ocupe toda la pantalla */
+    .parallax-hero {
+      min-height: 100vh;
+      min-height: 100dvh; /* Para soporte de viewport dinámico en móviles */
+    }
+
+    /* Mejoras para la responsividad */
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size: 2.25rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style></document_content>
+</invoke>

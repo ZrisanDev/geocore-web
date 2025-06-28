@@ -1,0 +1,306 @@
+---
+import { Image } from "astro:assets";
+import { projects } from "../Projects/data";
+
+// ProjectsSlider.astro
+const slideProjects = projects.slice(0, 5);
+---
+
+<div class="relative w-full">
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-gray-100"></div>
+
+  <!-- Main Content -->
+  <div class="relative z-10 flex flex-col justify-center px-4 pb-28">
+    <!-- Title -->
+    <h2
+      class="projects-title text-4xl md:text-5xl lg:text-6xl font-black text-center mb-16 text-[#26656c] opacity-0 translate-y-24"
+    >
+      NUESTROS PROYECTOS
+    </h2>
+
+    <!-- Slider Container -->
+    <div
+      class="slider-container w-full max-w-7xl mx-auto relative opacity-0 translate-y-12"
+    >
+      <!-- Slider Wrapper -->
+      <div class="overflow-hidden rounded-2xl">
+        <div
+          id="slider-track"
+          class="flex transition-transform duration-500 ease-in-out"
+          style="transform: translateX(0%)"
+        >
+          {
+            slideProjects.map((project) => (
+              <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                <div class="relative bg-black/80 backdrop-blur-sm rounded-2xl overflow-hidden h-80 md:h-96 group hover:scale-105 transition-transform duration-300">
+                  <Image
+                    width={1000}
+                    height={600}
+                    src={project.image}
+                    alt={project.title}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+
+                  {/* <!-- Overlays --> */}
+                  <div class="absolute inset-0 bg-black/50" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+
+                  {/* <!-- Icon --> */}
+                  {/* <div class="absolute top-4 right-4 w-16 h-16 rounded-full overflow-hidden border-4 border-white bg-white shadow-lg z-10">
+                  <Image
+                    src={project.icon}
+                    alt="Project Icon"
+                    width={1900}
+                    height={700}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div> */}
+
+                  {/* <!-- Content --> */}
+                  <div class="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
+                    <h3 class="text-xl md:text-2xl font-bold mb-2 group-hover:text-[#26656c] transition-colors duration-300">
+                      {project.title}
+                    </h3>
+                    <p class="text-sm uppercase font-bold tracking-wide text-[#26656c]">
+                      {project.client}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Navigation Controls -->
+      <div
+        class="navigation-controls flex justify-center items-center mt-8 gap-4 opacity-0 translate-y-8"
+      >
+        <!-- Previous Button -->
+        <button
+          id="prev-btn"
+          class="w-10 h-10 bg-white/10 backdrop-blur-sm hover:text-white hover:bg-[#26656c] rounded-full flex items-center justify-center text-[#26656c] transition-all duration-300 border border-[#26656c] hover:scale-110 cursor-pointer"
+          aria-label="Anterior"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+
+        <!-- Indicators -->
+        <div id="indicators" class="flex gap-2">
+          <!-- Los indicadores se generan dinámicamente con JS -->
+        </div>
+
+        <!-- Next Button -->
+        <button
+          id="next-btn"
+          class="w-10 h-10 bg-white/10 backdrop-blur-sm hover:text-white hover:bg-[#26656c] rounded-full flex items-center justify-center text-[#26656c] transition-all duration-300 border border-[#26656c] hover:scale-110 cursor-pointer"
+          aria-label="Siguiente"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Estado del slider
+  let currentIndex = 0;
+  let isTransitioning = false;
+  let isMobile = window.innerWidth < 768;
+  let autoplayInterval: any;
+
+  // Elementos del DOM
+  const sliderTrack = document.getElementById("slider-track");
+  const prevBtn = document.getElementById("prev-btn");
+  const nextBtn = document.getElementById("next-btn");
+  const indicatorsContainer = document.getElementById(
+    "indicators"
+  ) as HTMLElement;
+
+  // Configuración
+  const totalProjects = 9; // Número total de proyectos
+  const slidesToShow = 3; // Número de slides visibles en desktop
+
+  // Funciones utilitarias
+  function getMaxIndex() {
+    return isMobile
+      ? totalProjects - 1
+      : Math.max(0, totalProjects - slidesToShow);
+  }
+
+  function getTranslateX() {
+    return isMobile ? -currentIndex * 100 : -currentIndex * 33.333;
+  }
+
+  // Crear indicadores dinámicamente
+  function createIndicators() {
+    indicatorsContainer.innerHTML = "";
+    const maxIndex = getMaxIndex();
+    const numIndicators = maxIndex + 1;
+
+    for (let i = 0; i < numIndicators; i++) {
+      const indicator = document.createElement("button");
+      indicator.className = `w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 border border-black ${
+        i === currentIndex
+          ? "bg-[#26656c] scale-125"
+          : "bg-white/50 hover:bg-white/75"
+      }`;
+      indicator.addEventListener("click", () => goToSlide(i));
+      indicatorsContainer.appendChild(indicator);
+    }
+  }
+
+  // Actualizar posición del slider
+  function updateSlider() {
+    if (!sliderTrack) return;
+    sliderTrack.style.transform = `translateX(${getTranslateX()}%)`;
+    updateIndicators();
+  }
+
+  // Actualizar indicadores activos
+  function updateIndicators() {
+    const indicators = indicatorsContainer.querySelectorAll("button");
+    indicators.forEach((indicator, index) => {
+      if (index === currentIndex) {
+        indicator.className =
+          "w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 border border-black bg-[#26656c] scale-125";
+      } else {
+        indicator.className =
+          "w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-300 border border-black bg-white/50 hover:bg-white/75";
+      }
+    });
+  }
+
+  // Navegación
+  function nextSlide() {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    const maxIndex = getMaxIndex();
+    currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
+    updateSlider();
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 500);
+  }
+
+  function prevSlide() {
+    if (isTransitioning) return;
+    isTransitioning = true;
+    const maxIndex = getMaxIndex();
+    currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
+    updateSlider();
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 500);
+  }
+
+  function goToSlide(index: number) {
+    if (isTransitioning || index === currentIndex) return;
+    isTransitioning = true;
+    currentIndex = index;
+    updateSlider();
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 500);
+  }
+
+  // Autoplay
+  function startAutoplay() {
+    autoplayInterval = setInterval(() => {
+      if (!isTransitioning) {
+        nextSlide();
+      }
+    }, 5000);
+  }
+
+  function stopAutoplay() {
+    if (autoplayInterval) {
+      clearInterval(autoplayInterval);
+    }
+  }
+
+  // Manejo de resize
+  function handleResize() {
+    const wasMobile = isMobile;
+    isMobile = window.innerWidth < 768;
+
+    if (wasMobile !== isMobile) {
+      currentIndex = 0;
+      createIndicators();
+      updateSlider();
+    }
+  }
+
+  // Animaciones de entrada (sin GSAP)
+  function initAnimations() {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry: any) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = "1";
+          entry.target.style.transform = "translateY(0)";
+        }
+      });
+    }, observerOptions);
+
+    // Observar elementos para animación
+    const title = document.querySelector(".projects-title");
+    const slider = document.querySelector(".slider-container");
+    const controls = document.querySelector(".navigation-controls");
+
+    if (title) observer.observe(title);
+    if (slider) observer.observe(slider);
+    if (controls) observer.observe(controls);
+  }
+
+  // Inicialización
+  function init() {
+    createIndicators();
+    updateSlider();
+    initAnimations();
+    startAutoplay();
+
+    // Event listeners
+    prevBtn?.addEventListener("click", prevSlide);
+    nextBtn?.addEventListener("click", nextSlide);
+    window.addEventListener("resize", handleResize);
+
+    // Pausar autoplay en hover
+    const sliderContainer = document.querySelector(".slider-container");
+    sliderContainer?.addEventListener("mouseenter", stopAutoplay);
+    sliderContainer?.addEventListener("mouseleave", startAutoplay);
+  }
+
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener("astro:page-load", init);
+</script>
