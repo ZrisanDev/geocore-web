@@ -11,6 +11,6 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   output: "static",
-
+  site: "https://geocore-web.netlify.app/",
   adapter: netlify(),
 });
