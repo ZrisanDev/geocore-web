@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { projects } from "../Projects/data";
+import Modal from "./Modal.astro";
 
 // ProjectsSlider.astro
 const slideProjects = projects.slice(0, 5);
@@ -31,9 +32,12 @@ const slideProjects = projects.slice(0, 5);
           style="transform: translateX(0%)"
         >
           {
-            slideProjects.map((project) => (
+            slideProjects.map((project, index) => (
               <div class="w-full md:w-1/3 flex-shrink-0 px-2">
-                <div class="relative bg-black/80 backdrop-blur-sm rounded-2xl overflow-hidden h-80 md:h-96 group hover:scale-105 transition-transform duration-300">
+                <div
+                  class="project-card relative bg-black/80 backdrop-blur-sm rounded-2xl overflow-hidden h-80 md:h-96 group hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  data-project-index={index}
+                >
                   <Image
                     width={1000}
                     height={600}
@@ -47,18 +51,6 @@ const slideProjects = projects.slice(0, 5);
                   <div class="absolute inset-0 bg-black/50" />
                   <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
 
-                  {/* <!-- Icon --> */}
-                  {/* <div class="absolute top-4 right-4 w-16 h-16 rounded-full overflow-hidden border-4 border-white bg-white shadow-lg z-10">
-                  <Image
-                    src={project.icon}
-                    alt="Project Icon"
-                    width={1900}
-                    height={700}
-                    class="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div> */}
-
                   {/* <!-- Content --> */}
                   <div class="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
                     <h3 class="text-xl md:text-2xl font-bold mb-2 group-hover:text-[#26656c] transition-colors duration-300">
@@ -67,6 +59,31 @@ const slideProjects = projects.slice(0, 5);
                     <p class="text-sm uppercase font-bold tracking-wide text-[#26656c]">
                       {project.client}
                     </p>
+                  </div>
+
+                  {/* <!-- Click indicator --> */}
+                  <div class="absolute inset-0 bg-[#26656c]/0 group-hover:bg-[#26656c]/10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <div class="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                      <svg
+                        class="w-6 h-6 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -127,13 +144,18 @@ const slideProjects = projects.slice(0, 5);
     </div>
   </div>
 </div>
+<Modal />
 
 <script>
+  // Importar datos de proyectos
+  import { projects } from "../Projects/data";
+
   // Estado del slider
   let currentIndex = 0;
   let isTransitioning = false;
   let isMobile = window.innerWidth < 768;
   let autoplayInterval: any;
+  let slideProjects = projects.slice(0, 5);
 
   // Elementos del DOM
   const sliderTrack = document.getElementById("slider-track");
@@ -144,7 +166,7 @@ const slideProjects = projects.slice(0, 5);
   ) as HTMLElement;
 
   // Configuración
-  const totalProjects = 9; // Número total de proyectos
+  const totalProjects = slideProjects.length;
   const slidesToShow = 3; // Número de slides visibles en desktop
 
   // Funciones utilitarias
@@ -155,7 +177,12 @@ const slideProjects = projects.slice(0, 5);
   }
 
   function getTranslateX() {
-    return isMobile ? -currentIndex * 100 : -currentIndex * 33.333;
+    if (isMobile) {
+      return -currentIndex * 100;
+    } else {
+      // En desktop, cada slide ocupa 33.333% del ancho
+      return -currentIndex * (100 / slidesToShow);
+    }
   }
 
   // Crear indicadores dinámicamente
@@ -179,7 +206,8 @@ const slideProjects = projects.slice(0, 5);
   // Actualizar posición del slider
   function updateSlider() {
     if (!sliderTrack) return;
-    sliderTrack.style.transform = `translateX(${getTranslateX()}%)`;
+    const translateX = getTranslateX();
+    sliderTrack.style.transform = `translateX(${translateX}%)`;
     updateIndicators();
   }
 
@@ -230,6 +258,33 @@ const slideProjects = projects.slice(0, 5);
     }, 500);
   }
 
+  // Función para abrir proyecto en modal con slider de imágenes
+  function openProjectModal(projectIndex: number) {
+    const project = slideProjects[projectIndex];
+    if (!project) return;
+
+    // Determinar las imágenes a mostrar
+    const imagesToShow =
+      project.images && project.images.length > 0
+        ? project.images
+        : [project.image];
+
+    // Crear contenido adicional del modal que se mostrará DESPUÉS del ImageSlider
+    const projectInfo = `
+       
+    `;
+
+    // Abrir modal SOLO con las imágenes para el ImageSlider
+    // El contenido adicional se mostrará después del slider automáticamente
+    if ((window as any).openModal) {
+      (window as any).openModal({
+        title: project.title,
+        images: imagesToShow,
+        content: projectInfo, // Este contenido se agregará después del ImageSlider
+      });
+    }
+  }
+
   // Autoplay
   function startAutoplay() {
     autoplayInterval = setInterval(() => {
@@ -251,6 +306,7 @@ const slideProjects = projects.slice(0, 5);
     isMobile = window.innerWidth < 768;
 
     if (wasMobile !== isMobile) {
+      // Reset to first slide when switching between mobile/desktop
       currentIndex = 0;
       createIndicators();
       updateSlider();
@@ -290,17 +346,55 @@ const slideProjects = projects.slice(0, 5);
     initAnimations();
     startAutoplay();
 
-    // Event listeners
-    prevBtn?.addEventListener("click", prevSlide);
-    nextBtn?.addEventListener("click", nextSlide);
+    // Event listeners para navegación
+    prevBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      stopAutoplay();
+      prevSlide();
+      startAutoplay();
+    });
+
+    nextBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      stopAutoplay();
+      nextSlide();
+      startAutoplay();
+    });
+
+    // Event listeners para clicks en proyectos
+    const projectCards = document.querySelectorAll(".project-card");
+    projectCards.forEach((card, index) => {
+      card.addEventListener("click", (e) => {
+        e.preventDefault();
+        stopAutoplay();
+        openProjectModal(index);
+        // Reanudar autoplay después de un breve delay
+        setTimeout(() => startAutoplay(), 2000);
+      });
+    });
+
     window.addEventListener("resize", handleResize);
 
-    // Pausar autoplay en hover
+    // Pausar autoplay en hover del contenedor del slider
     const sliderContainer = document.querySelector(".slider-container");
     sliderContainer?.addEventListener("mouseenter", stopAutoplay);
     sliderContainer?.addEventListener("mouseleave", startAutoplay);
+
+    // Manejar el evento de cierre del modal para reanudar autoplay
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        setTimeout(() => startAutoplay(), 500);
+      }
+    });
   }
 
   // Inicializar cuando el DOM esté listo
   document.addEventListener("astro:page-load", init);
+
+  // También inicializar en DOMContentLoaded por si acaso
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 </script>

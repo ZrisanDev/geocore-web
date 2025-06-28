@@ -47,7 +47,7 @@
 
     <button
       id="slider-next"
-      class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 hover:bg-black/50 text-white rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm opacity-0 hover:opacity-100 group-hover:opacity-100"
+      class="absolute right-4 top-1/2 w-12 h-12 bg-black/30 hover:bg-black/50 text-white rounded-full flex items-center justify-center"
     >
       <svg
         class="w-6 h-6"
@@ -74,7 +74,6 @@
     </div>
   </div>
 </div>
-
 <script>
   class ImageSlider {
     private images: string[] = [];
@@ -131,7 +130,17 @@
       this.images = images;
       this.currentIndex = 0;
 
+      // Asegurar que hay imágenes antes de proceder
+      if (this.images.length === 0) return;
+
       this.createThumbnails();
+
+      // Cargar la primera imagen inmediatamente sin animación
+      this.mainImage.src = this.images[0];
+      this.mainImage.alt = `Imagen 1`;
+      this.mainImage.style.opacity = "1";
+
+      // Actualizar el resto de la UI
       this.updateDisplay();
     }
 
@@ -179,7 +188,7 @@
           thumb.className = thumb.className
             .replace("opacity-70", "")
             .replace("scale-105", "");
-          thumb.className += " ring-2 ring-emerald-400 scale-105 opacity-100";
+          thumb.className += "ring-2 ring-emerald-400 scale-105 opacity-100";
         } else {
           thumb.className = thumb.className.replace(
             "ring-2 ring-emerald-400 scale-105",
@@ -219,46 +228,3 @@
   // Exponer en window para uso global
   (window as any).imageSlider = imageSlider;
 </script>
-
-<style>
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  #slider-main-image {
-    transition: opacity 0.3s ease-in-out;
-  }
-
-  /* Animación suave para los controles */
-  #slider-prev,
-  #slider-next {
-    transition:
-      opacity 0.3s ease,
-      transform 0.2s ease;
-  }
-
-  #slider-prev:hover,
-  #slider-next:hover {
-    transform: translateY(-50%) scale(1.1);
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    #slider-prev,
-    #slider-next {
-      opacity: 1 !important;
-      width: 40px;
-      height: 40px;
-    }
-
-    #thumbnails-container img {
-      width: 3rem;
-      height: 3rem;
-    }
-  }
-</style>
