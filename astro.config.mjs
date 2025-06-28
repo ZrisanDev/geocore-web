@@ -14,6 +14,6 @@ export default defineConfig({
   site: "https://geocore-web.netlify.app/",
   adapter: netlify(),
   image: {
-    domains: ["https://res.cloudinary.com"],
+    domains: ["res.cloudinary.com"],
   },
 });
