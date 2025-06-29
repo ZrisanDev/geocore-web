@@ -100,7 +100,31 @@
       this.init();
     }
 
+    private initElements(): void {
+      this.mainImage = document.getElementById(
+        "slider-main-image"
+      ) as HTMLImageElement;
+      this.thumbnailsContainer = document.getElementById(
+        "thumbnails-container"
+      )!;
+      this.counter = document.getElementById("slider-counter")!;
+      this.prevBtn = document.getElementById("slider-prev")!;
+      this.nextBtn = document.getElementById("slider-next")!;
+      this.slider = document.getElementById("image-slider")!;
+    }
+
     private init(): void {
+      if (
+        !this.mainImage ||
+        !this.thumbnailsContainer ||
+        !this.counter ||
+        !this.prevBtn ||
+        !this.nextBtn ||
+        !this.slider
+      ) {
+        return; // Elementos no encontrados, salir
+      }
+
       this.prevBtn.addEventListener("click", () => this.prev());
       this.nextBtn.addEventListener("click", () => this.next());
 
@@ -152,10 +176,10 @@
         thumbnail.src = image;
         thumbnail.alt = `Imagen ${index + 1}`;
         thumbnail.className = `
-            w-16 h-16 object-cover rounded-lg cursor-pointer transition-all duration-300
-            hover:scale-110 hover:shadow-lg flex-shrink-0
-            ${index === this.currentIndex ? "ring-2 ring-emerald-400 scale-105" : "opacity-70 hover:opacity-100"}
-          `;
+              w-16 h-16 object-cover rounded-lg cursor-pointer transition-all duration-300
+              hover:scale-110 hover:shadow-lg flex-shrink-0
+              ${index === this.currentIndex ? "ring-2 ring-emerald-400 scale-105" : "opacity-70 hover:opacity-100"}
+            `;
 
         thumbnail.addEventListener("click", () => {
           this.currentIndex = index;
@@ -222,9 +246,15 @@
     }
   }
 
-  // Inicializar slider globalmente
-  const imageSlider = new ImageSlider();
+  function initializeImageSlider() {
+    const imageSlider = new ImageSlider();
+    // Exponer en window para uso global
+    (window as any).imageSlider = imageSlider;
+  }
 
-  // Exponer en window para uso global
-  (window as any).imageSlider = imageSlider;
+  // Inicializar en carga inicial
+  document.addEventListener("DOMContentLoaded", initializeImageSlider);
+
+  // Reinicializar después de las View Transitions de Astro
+  document.addEventListener("astro:page-load", initializeImageSlider);
 </script>
