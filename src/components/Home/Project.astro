@@ -15,14 +15,14 @@ const slideProjects = projects.slice(0, 5);
   <div class="relative z-10 flex flex-col justify-center px-4 pb-28">
     <!-- Title -->
     <h2
-      class="projects-title text-4xl md:text-5xl lg:text-6xl font-black text-center mb-16 text-[#26656c] opacity-0 translate-y-24"
+      class="projects-title text-4xl md:text-5xl lg:text-6xl font-black text-center mb-16 text-[#26656c] opacity-0 translate-y-24 transition-all duration-1000 ease-out"
     >
       NUESTROS PROYECTOS
     </h2>
 
     <!-- Slider Container -->
     <div
-      class="slider-container w-full max-w-7xl mx-auto relative opacity-0 translate-y-12"
+      class="slider-container w-full max-w-7xl mx-auto relative opacity-0 translate-y-12 transition-all duration-1000 ease-out delay-300"
     >
       <!-- Slider Wrapper -->
       <div class="overflow-hidden rounded-2xl">
@@ -94,7 +94,7 @@ const slideProjects = projects.slice(0, 5);
 
       <!-- Navigation Controls -->
       <div
-        class="navigation-controls flex justify-center items-center mt-8 gap-4 opacity-0 translate-y-8"
+        class="navigation-controls flex justify-center items-center mt-8 gap-4 opacity-0 translate-y-8 transition-all duration-1000 ease-out delay-500"
       >
         <!-- Previous Button -->
         <button
@@ -313,18 +313,18 @@ const slideProjects = projects.slice(0, 5);
     }
   }
 
-  // Animaciones de entrada (sin GSAP)
+  // Animaciones de entrada mejoradas
   function initAnimations() {
     const observerOptions = {
-      threshold: 0.1,
-      rootMargin: "0px 0px -50px 0px",
+      threshold: 0.2, // Aumenté el threshold para que se active cuando más del 20% sea visible
+      rootMargin: "0px 0px -100px 0px", // Cambié el rootMargin para que se active antes
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry: any) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.style.opacity = "1";
-          entry.target.style.transform = "translateY(0)";
+          // Agregar clase para activar la animación
+          entry.target.classList.add("animate-in");
         }
       });
     }, observerOptions);
@@ -341,20 +341,26 @@ const slideProjects = projects.slice(0, 5);
 
   // Inicialización
   function init() {
+    // Verificar que los elementos existan antes de proceder
+    if (!sliderTrack || !prevBtn || !nextBtn || !indicatorsContainer) {
+      console.warn("Algunos elementos del slider no se encontraron en el DOM");
+      return;
+    }
+
     createIndicators();
     updateSlider();
     initAnimations();
     startAutoplay();
 
     // Event listeners para navegación
-    prevBtn?.addEventListener("click", (e) => {
+    prevBtn.addEventListener("click", (e) => {
       e.preventDefault();
       stopAutoplay();
       prevSlide();
       startAutoplay();
     });
 
-    nextBtn?.addEventListener("click", (e) => {
+    nextBtn.addEventListener("click", (e) => {
       e.preventDefault();
       stopAutoplay();
       nextSlide();
@@ -388,13 +394,50 @@ const slideProjects = projects.slice(0, 5);
     });
   }
 
-  // Inicializar cuando el DOM esté listo
-  document.addEventListener("astro:page-load", init);
-
-  // También inicializar en DOMContentLoaded por si acaso
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
+  // Función para inicializar con diferentes eventos
+  function initializeSlider() {
+    // Esperar un poco para asegurar que el DOM esté completamente cargado
+    setTimeout(() => {
+      init();
+    }, 100);
   }
+
+  // Múltiples formas de inicialización para asegurar compatibilidad
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeSlider);
+    // document.addEventListener("astro:page-load", initializeSlider);
+  } else {
+    initializeSlider();
+  }
+
+  // También escuchar el evento astro:after-load por si acaso
+  document.addEventListener("astro:after-load", initializeSlider);
 </script>
+
+<style>
+  /* Estilos para las animaciones de entrada */
+  .projects-title.animate-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  .slider-container.animate-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  .navigation-controls.animate-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  /* Fallback para navegadores que no soporten IntersectionObserver */
+  @media (prefers-reduced-motion: reduce) {
+    .projects-title,
+    .slider-container,
+    .navigation-controls {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
